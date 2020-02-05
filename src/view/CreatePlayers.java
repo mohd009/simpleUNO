@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ca.sheridancollege.project;
+package view;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -33,8 +33,15 @@ public class CreatePlayers extends Player{
         
         
     }
-    public void addPlayer(int player){
-        
+    /**
+     * Create players where player in number of players
+     * @param playerSize total number of players
+     */
+    public void addPlayer(int playerSize){
+        for (int i=0; i<playerSize;i++){
+            System.out.println("Player "+ i+1 + " name");
+            Scanner name = new Scanner(System.in);
+        }
     }
     
     /**
@@ -44,8 +51,11 @@ public class CreatePlayers extends Player{
     public void checkValidity(int i){
         while (!(i <=4 && i>=0)){
             Scanner tryAgain =  new Scanner(System.in); 
-            checkValidity(tryAgain.nextInt());
+            playerCount = tryAgain.nextInt();
+            checkValidity(playerCount);
         }
+        //if valid, then add player
+        addPlayer(playerCount);
         
         
     }

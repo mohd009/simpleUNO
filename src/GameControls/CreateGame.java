@@ -5,10 +5,9 @@
  */
 package GameControls;
 
-import PlayersAndCards.Game;
-import PlayersAndCards.GeneratePlayer;
-import PlayersAndCards.Player;
-import java.util.ArrayList;
+import Cards.CardsPerPlayer;
+import Players.Game;
+
 import java.util.Scanner;
 
 /**
@@ -17,9 +16,10 @@ import java.util.Scanner;
  */
 public class CreateGame extends Game{
   
-    private ArrayList<Player> gamePlayers; // store players in array
-    private int playerCount;
+   // private ArrayList<Player> gamePlayers; // store players in array
+    private int playerCount; // used to check if number of players allowed in game valid.
     public CreateGame(){
+        
         
        
         
@@ -47,13 +47,9 @@ public class CreateGame extends Game{
         
         
     }
-    // Return the total number of players
-    public ArrayList getTotalPlayers(){
-        
-        return gamePlayers;
-    }
+    
     /**
-     * Return all players in an arraylist
+     * Add players in an arraylist
      * @param playerSize total number of players
      */
     public void addPlayer(int playerSize){
@@ -63,30 +59,23 @@ public class CreateGame extends Game{
             Scanner name = new Scanner(System.in);
             // Create each player and add it to arraylist
             
-            GeneratePlayer player = new GeneratePlayer(name.nextLine());
-            if (!checkDuplicate(player)){
-                 gamePlayers.add(player);}
+           // GeneratePlayer player = new GeneratePlayer(name.nextLine());
+           
             
-        }
         //Add the arraylist to the game
-        super.setPlayers(gamePlayers);
-        
-        //Game officially starts
-        startGameLogic();
- 
-        //System.out.println("Welcome")
-    }
-    /**
-     * Check if duplicate name
-     * @param name name of player
-     * @return false if not duplicate
-     */
-    public boolean checkDuplicate(Player name){
-        while ((gamePlayers.contains(name))){
-            System.out.println("Name exists, try another");
+        while (!super.addplayersToGame(name.nextLine())){
+            //Game officially starts
+               System.out.println("Name currently in use");
+            System.out.println("try again..");
+            super.addplayersToGame(name.nextLine());
         }
-        return false;
+     
     }
+        //WHEN added players, start the logic of the game
+        startGameLogic(super.getTotalPlayers());
+        
+    }
+   
     
     /**
      * check if value entered is correct
@@ -118,10 +107,17 @@ public class CreateGame extends Game{
      * Use numbers on keyboard, to select the position of card to play
      * Card won't be played if choose wrong type
      * if play wildcard, prompt player to choose color
+     * @param number of players in game
      */
-    public void startGameLogic(){
+    public void startGameLogic(int number){
+        //add option for them to select the number of cards to
+        // hand them each out
+       
+        CardsPerPlayer cards = new CardsPerPlayer(super.getTotalPlayers(),5);
+        super.addCardsToPlayer(cards.HandCards());
         
     }
+    
 /**
  * Once done, game shows the winner
  */

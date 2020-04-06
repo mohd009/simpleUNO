@@ -74,7 +74,32 @@ public class CardsPerPlayer
     {
         return stack.getStack();
     }
+    //return arraylist of cards played, will be used to return back to stack when run out
+    public ArrayList storeCardsPlayed(){
+        return stack.getCardsPlayed();
+    }
+    //after user picked 2/4, clear arraylist so as to use it later
+    public void clearCards(){
+        stack.clearGenerator();
+    }
+    //generate 2 
+    public ArrayList pick2(){
+       return stack.generate2();
+    }
+   
+    //generate 4
+    public ArrayList pick4(){
+        return stack.generate4();
+    }
+    //pick one card from stack s
+    public ArrayList pick1(){
+        return stack.generateOne();
+    }
     
+    //take back played cards to stack
+    public void returnPlayed(){
+        stack.returnToStack();
+    }
     
 
   

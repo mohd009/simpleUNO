@@ -17,6 +17,22 @@ public class UNOCard extends Card {
     private int number;
     private String ability;
     private String wildcard;
+
+    public String getColor() {
+        return color;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public String getAbility() {
+        return ability;
+    }
+
+    public String getWildcard() {
+        return wildcard;
+    }
    
     
    //initializes a normal card
@@ -32,24 +48,41 @@ public class UNOCard extends Card {
   
         
     }
-    //Initializes the wildcard that allows to pick any color
+    //Initializes the wildcard that allows to pick any color ,pick 4 and colorpicker
      public UNOCard(String wildcard){
         this.wildcard= wildcard;
    
         
         
     }
+    public String cardType(){
+        if(ability == null && wildcard == null){
+            return "normal";
+        }
+        else if( ability!=null){
+        
+            return "ability";
+            
+        }else{
+            if (wildcard.equals("PICK-4")){
+               return "ability";
+            }
+            else{
+            return "wildcard";
+            }
+        }
+    } 
 
     @Override
     public String toString() {
      
         if (ability == null && wildcard == null){
-                return ("Card: "+ color +" " + number);}
+                return ("("+ color +" " + number+")");}
         else if ((wildcard == null)){ 
-          return ("Card: "+ color + " "+ability);
+          return ("("+ color + " "+ability+")");
                 }
         else{
-                 return ("Card: "+ wildcard);
+                 return ("("+ wildcard+")");
         }
        
     }

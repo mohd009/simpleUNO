@@ -24,6 +24,9 @@ public  class StackOfUnoCards  {
     //The group of cards, stored in an ArrayList
     // private final ArrayList<UNOCard> perStack; //Each user will receive a stack once method called
     private final ArrayList <UNOCard> cards;
+    private ArrayList<UNOCard> cardsPlayed; // stores the cards that have been played
+    
+    private ArrayList<UNOCard> generator; //stores pick 2 cards and pick 4 cards
     private int size; // Size for number of cardsin game(60)
     private  final Integer [] number = {0,1,2,3,4,5,6,7,8,9};
     private final String [] colors = {"RED", "GREEN", "YELLOW", "BLUE"};
@@ -39,6 +42,8 @@ public  class StackOfUnoCards  {
     public StackOfUnoCards(int perPlayer){
        
         this.cards = new ArrayList(); // to store all cards in game
+        this.cardsPlayed = new ArrayList(); // stores cards that have been played
+        this.generator = new ArrayList();
       //  perStack = new ArrayList<>(); // a stack for each user
         run();
        
@@ -95,10 +100,11 @@ public  class StackOfUnoCards  {
             //perStack arrayList is given random cards since it's shuffled
            ArrayList<UNOCard> stack = new ArrayList<>();
            shuffle();
-           for (int i =0; i<=this.cards.size();i++){
-               updateSize(i);
+           //size 5 represents number of cards each player receives, change to variable later
+           for (int i =0; i<5;i++){
+               
                stack.add(this.cards.get(i));
-            
+               updateSize(i);
             }
            return stack;
             
@@ -110,7 +116,11 @@ public  class StackOfUnoCards  {
      * given cards 
      */
     private void updateSize(int index){
-        this.cards.remove(index);
+      //  System.out.println(this.cards.size());
+      // System.out.println("Remove: "+ this.cards.get(index) );
+        this.cards.remove(this.cards.get(index));
+       // System.out.println("stack looks like: ");
+       // System.out.println(getStack());
     }
      /**
      * Method to shuffle stack of cards before assigning to users
@@ -122,6 +132,39 @@ public  class StackOfUnoCards  {
         
         
     }
+    //generate 2 cards when pick 2 called,
+    public ArrayList generate2(){
+        for (int i=0;i<2;i++){
+            this.generator.add(this.cards.get(i));
+            //remove cards from the stack
+            this.cards.remove(i);
+            
+        }
+        return this.generator;
+        
+    }
+    //clear generator 
+    public void clearGenerator(){
+        this.generator.clear();
+    }
+    //generate 4 cards when pick 4 called,
+    public ArrayList generate4(){
+         for (int i=0;i<4;i++){
+            this.generator.add(this.cards.get(i));
+            //remove cards from the stack
+            this.cards.remove(i);
+            
+        }
+         return this.generator;
+    }
+    
+    public ArrayList generateOne(){
+        this.generator.add(this.cards.get(0));//remove one card from stack
+        
+        //update the stack
+        this.cards.remove(0);
+        return this.generator;
+    }
    
     /**
      * 
@@ -131,9 +174,18 @@ public  class StackOfUnoCards  {
         return this.cards ;
     }
     
-    
+    public ArrayList getCardsPlayed(){
+        return this.cardsPlayed;
+    }
+    //puts card played to array
+//    public void putCardPlayed(UNOCard e){
+//        this.cardsPlayed.add(e);
+//    }
     
 
-   
+   //add back played cards to the stack
+    public void returnToStack(){
+        this.cardsPlayed.addAll(this.cardsPlayed);
+    }
     
 }

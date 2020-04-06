@@ -5,9 +5,10 @@
  */
 package GameCreationtoPlay;
 
-import PlayersAndCards.GroupOfCards;
+
+import GameControls.CreateGame;
 import java.util.ArrayList;
-import PlayersAndCards.Player;
+import Players.Player;
 
 /**
  *
@@ -15,17 +16,13 @@ import PlayersAndCards.Player;
  */
 public class GameBegin {
     public static void main(String[] args) {
-     //   CreateGame players = new CreateGame();
+       CreateGame c = new CreateGame();
       //   players.play();
-         GroupOfCards c = new GroupOfCards(10);
-      
-         
-         c.assignCards();
-
- GroupOfCards cd = new GroupOfCards(10);
+      c.play();
+        
       
        
-         cd.assignCards();         
+        // cd.assignCards();         
          
          
          

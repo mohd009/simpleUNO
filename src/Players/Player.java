@@ -62,13 +62,27 @@ public abstract class Player
      */
     public abstract void play();
     
+    //check if their cards stack is empty to declare them winner
+    public abstract boolean noCards();
+    
+    //get a specific card and return the color
+    public abstract String getCardColor(int index);
+    //get a specific card and return the number of the card
+    public abstract int getCardNumber(int index);
+    //get a specific card and return its ability
+    public abstract String getColorAbility(int index);
+     public abstract String getCardAbility(int index);
+    
+    public abstract void removeCard(int index);
+    
+    
     public abstract ArrayList accessPlayerCards();
    
     /**
 	 * 
 	 * @param e
 	 */
-	public abstract void addCard(UNOCard e);
+   public abstract void addCard(UNOCard e);
     
 
 }

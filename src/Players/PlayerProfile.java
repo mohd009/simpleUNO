@@ -35,23 +35,114 @@ public class PlayerProfile extends Player {
     public void addCard(UNOCard e){
         playerHand.add(e);
     }
-    public void removeCard(UNOCard e){
-        playerHand.remove(e);
+   
+    @Override
+    public void removeCard(int index){
+        playerHand.remove(playerHand.get(index));
     }
     
     @Override
     public void addStack(ArrayList a){
-        playerHand = a;
+        playerHand.addAll(a);
     }
     
     
     //Method used by players when they are done their turn
     @Override
     public void play() {
+        System.out.println("Picking.......");
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
    
     
     }
+
+    @Override
+    public boolean noCards() {
+       if (playerHand.isEmpty()){
+           return true;
+           
+       }
+       else{
+           return false;
+       }
+       
+// throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    /**
+     * return color, if no color then it's wildcard, return null
+     * @param index of array
+     * @return 
+     */
+    @Override
+    public String getCardColor(int index) {
+        UNOCard card = playerHand.get(index);
+        //if not wildcard, then return color
+        if (!card.cardType().equals("wildcard")){
+            return card.getColor();
+        }else{
+            return null;
+        }
+
+    }
+/**
+ * Return card number of a regular card
+ * @param index
+ * @return 0 if card has no number, that means it's a wildcard/ability
+ */
+    @Override
+    public int getCardNumber(int index) {
+        UNOCard card = playerHand.get(index);
+        //if not wildcard, then return color
+        if (card.cardType().equals("normal")){
+            return card.getNumber();
+        }else{
+            return -1;
+        }
+
+    }
+   /**
+    * Return the ability of card
+    * @param index
+    * @return 
+    */
+    @Override
+    public String getColorAbility(int index) {
+       UNOCard card = playerHand.get(index);
+        //if not wildcard, then return color
+        if (card.cardType().equals("ability")){
+            if (card.getAbility()!=null){//then an ability
+                 return card.getColor();}
+            else{//then it's a PICK-4 card
+                return "black";
+            }
+        }else if (card.cardType().equals("normal")){
+            return "normal";
+        }
+        else{//then wildcard
+               return null; 
+                }
+        
+            
+        
+       // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
+    @Override
+    public String getCardAbility(int index){
+         UNOCard card = playerHand.get(index);
+          if (card.cardType().equals("ability")){
+            if (card.getAbility()!=null){//then an ability
+                 return card.getAbility();}
+            else{//then it's a PICK-4 card
+                
+                return card.getWildcard();
+            }
+        }else{
+            return null;
+        }
+    }
+   
     
     
 }

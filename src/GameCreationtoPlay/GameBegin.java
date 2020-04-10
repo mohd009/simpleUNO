@@ -9,6 +9,8 @@ package GameCreationtoPlay;
 import GameControls.CreateGame;
 import java.util.ArrayList;
 import Players.Player;
+import View.gameView;
+
 
 /**
  *
@@ -17,8 +19,17 @@ import Players.Player;
 public class GameBegin {
     public static void main(String[] args) {
        CreateGame c = new CreateGame();
-      //   players.play();
-      c.play();
+       c.play();
+      
+      //replay
+      gameView v = new gameView();
+      if (v.askToPlayAgain()){
+          CreateGame again = new CreateGame();
+          again.play();
+      }
+      else{
+          
+      }
         
       
        

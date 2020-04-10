@@ -7,6 +7,7 @@ package GameControls;
 
 import Cards.CardsPerPlayer;
 import Players.Game;
+import View.gameView;
 import java.util.ArrayList;
 
 import java.util.Scanner;
@@ -16,7 +17,8 @@ import java.util.Scanner;
  * @author Mohamed, player
  */
 public class CreateGame extends Game{
-  
+    
+    private gameView view; //VIEW OF THE GAME
    // private ArrayList<Player> gamePlayers; // store players in array
     private int playerCount; // used to check if number of players allowed in game valid.
     private boolean firstTime = true; //to initiate starting card by user and determine if it's the first time playing
@@ -24,14 +26,11 @@ public class CreateGame extends Game{
     private String previousAbility=null; //check if an ability was used before the next user round
     private boolean passNext = false; //used to determine if play wants to pass and doesn't have card after picking card
     private String input = null;//Store user input
+    
     public CreateGame(){
-        
-        
-       
-        
-        super("UNO-GAME");
-   
-       
+     super("UNO-GAME");
+         view = new gameView();
+     
     }
     /**
      * When this method called, it will ask for user input.
@@ -42,17 +41,9 @@ public class CreateGame extends Game{
     // This mehod will check if count is valid then add players in arraylist
     @Override
     public void play(){
-        System.out.println("Welcome to the game: "+ super.getGameName());
-        System.out.print("Enter the number of players playing: ");
-        Scanner input = new Scanner(System.in); 
-        playerCount = input.nextInt();
-        
+        playerCount = view.playerCount(super.getGameName());
         checkValidity(playerCount);
-        
-        
-        
-        
-    }
+        }
     
     /**
      * Add players in an arraylist
@@ -60,20 +51,18 @@ public class CreateGame extends Game{
      */
     public void addPlayer(int playerSize){
         for (int i=0; i<playerSize;i++){
-            System.out.println("Enter player name");
-            System.out.print("Player "+ (i+1) + " name: ");
-            Scanner name = new Scanner(System.in);
+            String name = view.AskPlayerNames(i);
             // Create each player and add it to arraylist
             
            // GeneratePlayer player = new GeneratePlayer(name.nextLine());
            
             
         //Add the arraylist to the game
-        while (!super.addplayersToGame(name.nextLine())){
+        while (!super.addplayersToGame(name)){
             //Game officially starts
-               System.out.println("Name currently in use");
+            System.out.println("Name currently in use");
             System.out.println("try again..");
-            super.addplayersToGame(name.nextLine());
+            super.addplayersToGame(name);
         }
      
     }
@@ -90,10 +79,8 @@ public class CreateGame extends Game{
     //use do while for enhanced
     public void checkValidity(int i){
         if (!(i <=4 && i>1)){
-            System.out.println("Game only allows maximum of 4 and minimum of 2");
-            System.out.println("Try again");
-            Scanner tryAgain =  new Scanner(System.in); 
-            playerCount = tryAgain.nextInt();
+           
+            playerCount = view.numPlaying();
             checkValidity(playerCount);
         
         }
@@ -104,40 +91,27 @@ public class CreateGame extends Game{
         
         
     }
-    /**
-     * Use play() method from player when a player is done their turn
-     * Assign each player a stack of cards and controls for them 
-     * p - pick card
-     * n - go to next person after they pick and have none
-     * players can see deck of other users but in format [*,*,*,*..] hidden
-     * Use numbers on keyboard, to select the position of card to play
-     * Card won't be played if choose wrong type
-     * if play wildcard, prompt player to choose color
-     * @param number of players in game
-     */
+
     public void startGameLogic(int number){
         //add option for them to select the number of cards to
         // hand them each out
         boolean gameDone=false;
         int thePlayers = super.getTotalPlayers();
-       
-        
         CardsPerPlayer cards = new CardsPerPlayer(thePlayers,5);
-       // System.out.println(cards.HandCards());
-       
-        
+   
         //hand cards to players
        super.addCardsToPlayer(cards.HandCards());
-      //see players cards after handed out
-      seeCards();
-      
-      //Initiate starting card, should be normal card
-      
      
-       //loop through each players until game done
+   //loop through each players until game done
        while (!gameDone){
            //loop through each player array 
            for(int i=0;i<thePlayers;i++){
+               seeCards();
+               if (super.getPlayers().get(i).noCards()){
+                   declareWinner(super.getPlayers().get(i).getPlayerID());
+                   gameDone=true;
+                   break;
+               }
                //reset correct  card
                correctCard=false;
                int cardIndex;
@@ -170,44 +144,43 @@ public class CreateGame extends Game{
                }
                else if (previousAbility != null){
                    if (previousAbility.equals("PICK-2")){
-                       System.out.println("<----2 CARDS GIVEN TO YOU AND SKIPPED---->");
+                       System.out.println("<----------2 CARDS GIVEN TO YOU AND SKIPPED---------->");
                        //cards.pick2()-makes 2 cards in array, then i is index of player
                        addPick2orPick4(cards.pick2(),i );
                        //after adding clear generator
                        cards.clearCards();
-                      
+                      // seeSpecificPlayerCards(i);
                        //reset previuos ability for next player to use
                        previousAbility=null;
-                        //now show the user the cards
-                       System.out.println("Your card stack is now-->");
-                       seeCards();
+                      
                        
                        
                        
                        
                    }else if (previousAbility.equals("PICK-4")){
-                       System.out.println("<----4 CARDS GIVEN TO YOU AND SKIPPED---->");
+                       System.out.println("<----------4 CARDS GIVEN TO YOU AND SKIPPED---------->");
                        //cards.pick2()-makes 2 cards in array, then i is index of player
                        addPick2orPick4(cards.pick4(),i );
                        //after adding clear generator
                        cards.clearCards();
                        //reset previuos ability for next player to use
                        previousAbility=null;
+                      // seeSpecificPlayerCards(i);
                        //now show the user the cards
-                       System.out.println("Your card stack looks like now-->");
-                       seeCards();
+                      // System.out.println("Your card stack looks like now-->");
+                       //seeCards();
                        
                    }else if (previousAbility.equals("SKIP")){
                        //reset previuos ability for next player to use
                        previousAbility=null;
-                       System.out.println("<----Your turn is skipped---->");
+                       System.out.println("<-----------Your turn is skipped---------->");
                        //do nothing and loop continues
                        
                        
                        
                         
                    }else{//then it is a reverse card
-                       System.out.println("<----ORDER REVERSED--->");
+                       System.out.println("<----------ORDER REVERSED---------->");
                        previousAbility=null;
                        super.reverseOrder(i);
                    }
@@ -217,7 +190,7 @@ public class CreateGame extends Game{
                else{
                    System.out.println("--------------------------------------");
                    System.out.println(super.getPlayers().get(i).getPlayerID()+" turn: ");
-                   input = userPlayOrPick();
+                   input = view.userPlayOrPick();
                   while(correctCard != true){//check if card is right and if picked card then end loop, go to next person(not added yet)!!
                        
                   if (input.equals("play")){
@@ -252,12 +225,11 @@ public class CreateGame extends Game{
                     }else{
                         boolean choose = false;
                         while(choose!=true){
-                            System.out.println("Choose color: red, blue, green, yellow");
-                            Scanner color = new Scanner(System.in);
-                            String colorChoice = color.nextLine();
+                        
+                            String colorChoice = view.pickColor();
                             if ((colorChoice.equals("red") || colorChoice.equals("blue") ||colorChoice.equals("green")|| colorChoice.equals("yellow")) ){
                                 super.playWildCard(colorChoice);
-                                System.out.println("Color changed to: "+colorChoice.toUpperCase());
+                                System.out.println("Color changed to--->>: "+colorChoice.toUpperCase());
                                 
                                 
                                  //store card to put back
@@ -286,9 +258,8 @@ public class CreateGame extends Game{
                       
                       while(checker!=true){
                           System.out.println("CHOOSE to play OR pass:");
-                          seeCards();
-                          Scanner passOrplay = new Scanner(System.in);
-                          String ans = passOrplay.nextLine();
+                        //  seeCards();
+                         String ans = view.userPlayOrPick();
                           if (ans.equals("play")){
                               input="play";//then go to play statement
                               checker=true;
@@ -302,17 +273,7 @@ public class CreateGame extends Game{
                               System.out.println("Try again");
                           }
                       }       
-                       
-                      
-                  }
-                 
-               
-               
-               
-               
-                
-               
-                  } 
+                   } } 
                
                
              }
@@ -323,7 +284,9 @@ public class CreateGame extends Game{
        
      
     }
-    
+    public void seeSpecificPlayerCards(int i){
+        System.out.println("Your cards now look like --->"+super.getPlayers().get(i).accessPlayerCards());
+    }
     public void firstTimePlay(){
         firstTime = false;
         
@@ -336,14 +299,11 @@ public class CreateGame extends Game{
         //loop until user picks normal card
         while(check != true){
             //0 = because always be first player
-            
             //PickCardToPlay goes to a loop
            cardIndex=PickCardToPlay(super.getPlayers().get(0).accessPlayerCards(),super.getPlayers().get(0).getPlayerID());
            if (!super.checkCardType(0, cardIndex).equals("normal")){//if user still not picking normal
                       System.out.println("Please begin with a regular card");
-                     // seeCards(); // shows user the cards.
-                      
-                }
+           }
            else{ 
                super.initiateFirstTime(super.getPlayers().get(0).getCardNumber(cardIndex), super.getPlayers().get(0).getCardColor(cardIndex));
 
@@ -353,46 +313,7 @@ public class CreateGame extends Game{
         }return cardIndex;
         
     }
-    
-    public String userPlayOrPick(){
-       
-        seeCards(); // make user see all cards in order to decide
-        System.out.println("Play  or Pick card");
-        
-        boolean input = false;
-        
-        while (input!=true){
-            Scanner pick = new Scanner(System.in);
-            String answer = pick.nextLine();
-            if (answer.equals("pick")){
-               //meaning user already picked card, won't be allowed to pick prompt
-                     return "pick";
-               
-               
-            
-        }else if (answer.equals("play")){
-          
-                return "play";
-            
-        }else{
-            // seeCards(); // make user see all cards in order to decide
-             System.out.println("Invalid output--->Choose play or pick");
-             //System.out.println("Look at Cards and decide");
-             //seeCards();
-          
-             
-        }
-            
-            
-        }
-        
-        
-       
-        return null;
-    }
-    
-    
-    
+ 
     /**
      * When invoked shows all the cards of the players, for now it's for testing to see their cards
      * 
@@ -404,14 +325,11 @@ public class CreateGame extends Game{
     }
     public int PickCardToPlay(ArrayList nextPlayer, String name){
         System.out.println("Okay "+name+", choose an index-->");
-        Scanner user = new Scanner(System.in);
-        int choice = Integer.parseInt(user.nextLine());
+        int choice = view.chooseIndex();
         boolean indexCorrect=false;
         while (indexCorrect !=true){
             if (choice > nextPlayer.size()-1 || choice < 0){
-                System.out.println("Invalid index, try again");
-                 user = new Scanner(System.in);
-                 choice = Integer.parseInt(user.nextLine());
+                choice = view.tryAgain();
                 
             }else{
                 indexCorrect=true;
@@ -419,27 +337,25 @@ public class CreateGame extends Game{
             }
         }
        // check type of card played
-              
-               return choice;
+                return choice;
     }
     
   
     
 /**
  * Once done, game shows the winner
+     * @param player the winner of the game
  */
     @Override
-    public void declareWinner() {
+    public void declareWinner(String player) {
        // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       System.out.println("YAY and the winner is........"+ player);
+       System.out.println("--------------------------GAME OVER----------------------------------------------------");
+   
+    
     }
-    /**
-     * Used to ask user 
-     * @return 
-     */
     
-    
-    
-    //now run method to give cards out
+   
     
     
 }

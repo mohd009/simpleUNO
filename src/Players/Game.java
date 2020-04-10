@@ -5,9 +5,8 @@
  */
 package Players;
 
-import Players.Player;
+
 import java.util.ArrayList;
-import Players.Player;
 
 /**
  * The class that models your game. You should create a more specific
@@ -81,11 +80,10 @@ public abstract class Game
             
             this.players.get(i).addStack((ArrayList)playerCards.get(i));
         }
-       // System.out.println(this.players.get(0).accessPlayerCards());
-      //  System.out.println(this.players.get(1).accessPlayerCards());
     }
     //the cardsize is the number of cards in the arraylist to give to playerToGive stack
     public void addPick2orPick4(ArrayList cardSize, int playerToGive){
+        System.out.println(cardSize.size());
         this.players.get(playerToGive).addStack(cardSize);
         
         
@@ -99,21 +97,28 @@ public abstract class Game
     public void reverseOrder(int currentPlayerIndex){
        ArrayList<Player> tempList = new ArrayList();
        int lastIndex = this.players.size()-1;
+  
+       if (currentPlayerIndex !=0 ){
+           for (int i=currentPlayerIndex-1; i>=0;i--){
+           tempList.add(this.players.get(i));
+       }
+       if (lastIndex == currentPlayerIndex){
+           tempList.add(this.players.get(lastIndex));
+       }
+          
+       }
+       if (lastIndex != currentPlayerIndex ){
+            for(int i = lastIndex; i>currentPlayerIndex-1;i--){
+           tempList.add(this.players.get(i));
+       }
+       }
       
-       int sizeBeforeCurrent = currentPlayerIndex; 
-       //add all before
-       for (int i=currentPlayerIndex-1; i<sizeBeforeCurrent;i--){
-           tempList.add(this.players.get(i));
+       this.players.clear();
+       for (int i=0; i<tempList.size();i++){
+           this.players.add(tempList.get(i));
        }
-       //add all after
-       int sizeAfterCurrent = Math.abs(sizeBeforeCurrent - lastIndex);
-       for(int i = lastIndex; i<sizeAfterCurrent;i--){
-           tempList.add(this.players.get(i));
-       }
-       //add the current index as the last
-       tempList.add(lastIndex, this.players.get(currentPlayerIndex));//make the current index the last
-       //assign playerArray to temp
-       this.players = tempList;
+
+ 
     }
    
     /**
@@ -150,17 +155,12 @@ public abstract class Game
         }//then the card is a normal card
         else if(players.get(playerIndex).getCardNumber(index) != -1 ){
            return "normal"; 
-          // int num = players.get(playerIndex).getCardNumber(index);
-           //String color = players.get(playerIndex).getCardColor(index);
-           //playNormalCard(num, color);
+ 
             
         }
         else{//then it's an ability card
             return "ability";
-           // String color = players.get(playerIndex).getCardColor(index);
-           // String power = players.get(playerIndex).getCardAbility(index);
-           // playAbilityCard(color, power,playerIndex);
-            
+ 
         }
         
         
@@ -178,7 +178,7 @@ public abstract class Game
             //so number is valid and matches old one so replace it.//since same no need
            // oldNum = num;
            //but replace color
-           System.out.println("number---"+num+"color----"+color);
+          
 
            oldColor = color;
            return true;
@@ -187,7 +187,7 @@ public abstract class Game
         }else if (color.equals(oldColor) || oldColor.equals("black"))//then new card matches old color, but replace number since new card has diff number
             
         {          
-            System.out.println("number---"+num+"color----"+color);
+           
 
             oldNum = num;
             //remove the ability if there was
@@ -250,8 +250,9 @@ public abstract class Game
     /**
      * When the game is over, use this method to declare and display a winning
      * player.
+     * @param player
      */
-    public abstract void declareWinner();
+    public abstract void declareWinner(String player);
 
     
 

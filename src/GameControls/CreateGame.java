@@ -78,18 +78,27 @@ public class CreateGame extends Game{
      */
     //use do while for enhanced
     public void checkValidity(int i){
-        if (!(i <=4 && i>1)){
+        
+      //  if (!(i <=4 && i>1)){
            
-            playerCount = view.numPlaying();
-            checkValidity(playerCount);
+       
+            
+       if(checkSize(i)){
+           addPlayer(i);
         
         }
        
         //if valid, then add player
-        else{addPlayer(i);}
-      
+        else{
+           playerCount = view.numPlaying();
+            checkValidity(playerCount);
+       }
+           // return true;
         
         
+    }
+    public boolean checkSize(int size){
+        return size<=4 && size > 1;
     }
 
     public void startGameLogic(int number){
@@ -227,7 +236,7 @@ public class CreateGame extends Game{
                         while(choose!=true){
                         
                             String colorChoice = view.pickColor();
-                            if ((colorChoice.equals("red") || colorChoice.equals("blue") ||colorChoice.equals("green")|| colorChoice.equals("yellow")) ){
+                            if (checkColor(colorChoice)){
                                 super.playWildCard(colorChoice);
                                 System.out.println("Color changed to--->>: "+colorChoice.toUpperCase());
                                 
@@ -253,21 +262,20 @@ public class CreateGame extends Game{
                   else {//(input.equals("pick")){
                       cards.clearCards();//clear generator
                       super.givePlayerOneCard(cards.pick1(), i);
-                      
+                      seeSpecificPlayerCards(i);//see cards
                       boolean checker=false;
                       
                       while(checker!=true){
                           System.out.println("CHOOSE to play OR pass:");
                         //  seeCards();
-                         String ans = view.userPlayOrPick();
+                         String ans = view.passPlay();
+                         //check if play or pass to exit the loop 
+                          checker = checkAnswer(ans);
                           if (ans.equals("play")){
                               input="play";//then go to play statement
-                              checker=true;
-                              //passNext = true; 
                           }else if (ans.equals("pass")){//then end loop go to next player
                               correctCard = true;
-                              
-                              checker=true;
+                             
                           }
                           else{
                               System.out.println("Try again");
@@ -283,6 +291,13 @@ public class CreateGame extends Game{
        }
        
      
+    }
+    public boolean checkAnswer(String s){
+        return s.equals("play")|| s.equals("pass");
+    }
+    public boolean checkColor(String colorChoice){
+        return colorChoice.equals("red") || colorChoice.equals("blue") ||colorChoice.equals("green")|| colorChoice.equals("yellow");
+
     }
     public void seeSpecificPlayerCards(int i){
         System.out.println("Your cards now look like --->"+super.getPlayers().get(i).accessPlayerCards());
@@ -328,9 +343,8 @@ public class CreateGame extends Game{
         int choice = view.chooseIndex();
         boolean indexCorrect=false;
         while (indexCorrect !=true){
-            if (choice > nextPlayer.size()-1 || choice < 0){
+            if (!checkRightCardIndex(choice,nextPlayer)){
                 choice = view.tryAgain();
-                
             }else{
                 indexCorrect=true;
                 System.out.println(name+" played: "+nextPlayer.get(choice));
@@ -338,6 +352,10 @@ public class CreateGame extends Game{
         }
        // check type of card played
                 return choice;
+    }
+    
+    public boolean checkRightCardIndex(int i, ArrayList s){
+        return !(i>s.size()-1 || i<0);
     }
     
   

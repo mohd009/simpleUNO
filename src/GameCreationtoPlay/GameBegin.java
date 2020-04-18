@@ -19,6 +19,7 @@ import View.gameView;
 public class GameBegin {
     public static void main(String[] args) {
        CreateGame c = new CreateGame();
+       c.instructions();
        c.play();
       
       //replay
@@ -28,7 +29,7 @@ public class GameBegin {
           again.play();
       }
       else{
-          
+          System.out.println("Thanks for playing, please rate us..");
       }
         
       

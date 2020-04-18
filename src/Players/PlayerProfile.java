@@ -43,7 +43,7 @@ public class PlayerProfile extends Player {
     
     @Override
     public void addStack(ArrayList a){
-        if (a.size() == 4 || a.size() == 2){
+        if (a.size() == 4 || a.size() == 2 || a.size() == 1){
         playerHand.addAll(a);
         }
         //
@@ -51,6 +51,7 @@ public class PlayerProfile extends Player {
             a.remove(0);
              playerHand.addAll(a);
         }
+       
     }
     
     

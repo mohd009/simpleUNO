@@ -35,7 +35,7 @@ public class PlayerProfile extends Player {
     public void addCard(UNOCard e){
         playerHand.add(e);
     }
-   
+    
     @Override
     public void removeCard(int index){
         playerHand.remove(playerHand.get(index));

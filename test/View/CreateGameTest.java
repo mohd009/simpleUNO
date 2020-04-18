@@ -73,14 +73,7 @@ public class CreateGameTest {
         
         
     }
-     @Test
-    public void checkSizeTestAlphabet(){
-        CreateGame c = new CreateGame();
-        boolean check = c.checkSize(6);
-        boolean exp = false;
-        assertEquals(exp,check);
-        
-    }
+   
     @Test
     public void checkColorTest(){
         CreateGame c = new CreateGame();

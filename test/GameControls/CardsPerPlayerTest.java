@@ -77,7 +77,7 @@ public class CardsPerPlayerTest {
     }
     @Test
     public void checkPlayerHasCards(){
-        System.out.println("add 2 cards");
+        System.out.println("check cards");
         CardsPerPlayer c = new CardsPerPlayer(2,3);//where 2 represents the number of players
         ArrayList check = c.HandCards();
         assertEquals(2,check.size());

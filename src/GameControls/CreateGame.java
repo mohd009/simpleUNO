@@ -161,41 +161,25 @@ public class CreateGame extends Game{
                       // seeSpecificPlayerCards(i);
                        //reset previuos ability for next player to use
                        previousAbility=null;
-                      
-                       
-                       
-                       
-                       
-                   }else if (previousAbility.equals("PICK-4")){
+                    }else if (previousAbility.equals("PICK-4")){
                        System.out.println("<----------4 CARDS GIVEN TO YOU AND SKIPPED---------->");
                        //cards.pick2()-makes 2 cards in array, then i is index of player
                        addPick2orPick4(cards.pick4(),i );
                        //after adding clear generator
                        cards.clearCards();
-                       //reset previuos ability for next player to use
+               
                        previousAbility=null;
-                      // seeSpecificPlayerCards(i);
-                       //now show the user the cards
-                      // System.out.println("Your card stack looks like now-->");
-                       //seeCards();
-                       
                    }else if (previousAbility.equals("SKIP")){
                        //reset previuos ability for next player to use
                        previousAbility=null;
                        System.out.println("<-----------Your turn is skipped---------->");
                        //do nothing and loop continues
-                       
-                       
-                       
-                        
-                   }else{//then it is a reverse card
+                     }else{//then it is a reverse card
                        System.out.println("<----------ORDER REVERSED---------->");
                        previousAbility=null;
                        super.reverseOrder(i);
                    }
-                   
-                   
-               }
+                 }
                else{
                    System.out.println("--------------------------------------");
                    System.out.println(super.getPlayers().get(i).getPlayerID()+" turn: ");
@@ -356,6 +340,10 @@ public class CreateGame extends Game{
     
     public boolean checkRightCardIndex(int i, ArrayList s){
         return !(i>s.size()-1 || i<0);
+    }
+    
+    public void instructions(){
+        view.gameInstructions();
     }
     
   

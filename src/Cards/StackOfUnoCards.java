@@ -75,8 +75,7 @@ public  class StackOfUnoCards  {
             this.cards.add(new UNOCard(wild[0]));// wildcard
             this.cards.add(new UNOCard(wild[1]));//pick 4
         }
-        System.out.println("_______-----------------");
-        System.out.println(this.cards);
+        
     }
     
     /**
